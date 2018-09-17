@@ -81,7 +81,7 @@ class BSDS_RCFLoader(data.Dataset):
             raise ValueError("Invalid split type!")
         with open(self.filelist, 'r') as f:
             self.filelist = f.readlines()
-            self.filelist = self.filelist[::-1]
+
 
     def __len__(self):
         return len(self.filelist)
@@ -106,8 +106,8 @@ class BSDS_RCFLoader(data.Dataset):
             img = prepare_image_cv2(img)
             return img, lb
         else:
-            img = np.array(Image.open(join(self.root, img_file)), dtype=np.float32)
-            img = prepare_image_PIL(img)
+            img = np.array(cv2.imread(join(self.root, img_file)), dtype=np.float32)
+            img = prepare_image_cv2(img)
             return img
 
 # class BSDS_RCFLoader(data.Dataset):

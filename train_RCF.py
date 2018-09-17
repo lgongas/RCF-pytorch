@@ -69,9 +69,9 @@ def main():
     # dataset
     train_dataset = BSDS_RCFLoader(root=args.dataset, split="train")
     test_dataset = BSDS_RCFLoader(root=args.dataset, split="test")
-    train_loader_order = DataLoader(
-        train_dataset, batch_size=args.batch_size,
-        num_workers=8, drop_last=True,shuffle=False)
+    # train_loader_order = DataLoader(
+    #     train_dataset, batch_size=args.batch_size,
+    #     num_workers=8, drop_last=True,shuffle=False)
     train_loader  = DataLoader(
         train_dataset, batch_size=args.batch_size,
         num_workers=8, drop_last=True,shuffle=True)
@@ -207,11 +207,11 @@ def main():
     for epoch in range(args.start_epoch, args.maxepoch):
         if epoch == 0:
             print("Performing initial testing...")
-            # multiscale_test(model, test_loader, epoch=epoch, test_list=test_list,
-            #      save_dir = join(TMP_DIR, 'initial-testing-record'))
+            multiscale_test(model, test_loader, epoch=epoch, test_list=test_list,
+                 save_dir = join(TMP_DIR, 'initial-testing-record'))
         if epoch == 0:
             tr_avg_loss, tr_detail_loss = train(
-            train_loader_order, model, optimizer, epoch,
+            train_loader, model, optimizer, epoch,
             save_dir = join(TMP_DIR, 'epoch-%d-training-record' % epoch))
         else:    
             tr_avg_loss, tr_detail_loss = train(
@@ -253,7 +253,7 @@ def train(train_loader, model, optimizer, epoch, save_dir):
         for o in outputs:
             loss = loss + cross_entropy_loss_RCF(o, label)
         counter += 1
-        #loss = loss / args.itersize
+        loss = loss / args.itersize
         loss.backward()
         if counter == args.itersize:
             optimizer.step()

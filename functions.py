@@ -117,7 +117,7 @@ class SGD_caffe(Optimizer):
                         d_p = d_p.add(momentum, buf)
                     else:
                         d_p = buf
-                d_p = d_p / 10
+                d_p = d_p
 
                 p.data.add_(-1, d_p)
 
