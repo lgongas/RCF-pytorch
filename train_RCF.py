@@ -169,7 +169,7 @@ def main():
                 net_parameters_id['score_final.bias'] = []
             net_parameters_id['score_final.bias'].append(p)
 
-    optimizer = torch.optim.SGD([
+    optimizer = SGD_caffe([
             {'params': net_parameters_id['conv1-4.weight']      , 'lr': args.lr*1    , 'weight_decay': args.weight_decay},
             {'params': net_parameters_id['conv1-4.bias']        , 'lr': args.lr*2    , 'weight_decay': 0.},
             {'params': net_parameters_id['conv5.weight']        , 'lr': args.lr*100  , 'weight_decay': args.weight_decay},
@@ -253,7 +253,7 @@ def train(train_loader, model, optimizer, epoch, save_dir):
         for o in outputs:
             loss = loss + cross_entropy_loss_RCF(o, label)
         counter += 1
-        loss = loss / args.itersize
+        #loss = loss / args.itersize
         loss.backward()
         if counter == args.itersize:
             optimizer.step()
