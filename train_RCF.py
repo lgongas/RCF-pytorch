@@ -169,8 +169,8 @@ def main():
     optimizer = SGD_caffe([
             {'params': net_parameters_id['conv1-4.weight']      , 'lr': args.lr*1    , 'weight_decay': args.weight_decay},
             {'params': net_parameters_id['conv1-4.bias']        , 'lr': args.lr*2    , 'weight_decay': 0.},
-            {'params': net_parameters_id['conv5.weight']        , 'lr': args.lr*100  , 'weight_decay': args.weight_decay},
-            {'params': net_parameters_id['conv5.bias']          , 'lr': args.lr*200  , 'weight_decay': 0.},
+            {'params': net_parameters_id['conv5.weight']        , 'lr': args.lr*80  , 'weight_decay': args.weight_decay},
+            {'params': net_parameters_id['conv5.bias']          , 'lr': args.lr*160  , 'weight_decay': 0.},
             {'params': net_parameters_id['conv_down_1-5.weight'], 'lr': args.lr*0.1  , 'weight_decay': args.weight_decay},
             {'params': net_parameters_id['conv_down_1-5.bias']  , 'lr': args.lr*0.2  , 'weight_decay': 0.},
             {'params': net_parameters_id['score_dsn_1-5.weight'], 'lr': args.lr*0.01 , 'weight_decay': args.weight_decay},
@@ -204,8 +204,8 @@ def main():
     for epoch in range(args.start_epoch, args.maxepoch):
         if epoch == 0:
             print("Performing initial testing...")
-            multiscale_test(model, test_loader, epoch=epoch, test_list=test_list,
-                 save_dir = join(TMP_DIR, 'initial-testing-record'))
+            # multiscale_test(model, test_loader, epoch=epoch, test_list=test_list,
+            #      save_dir = join(TMP_DIR, 'initial-testing-record'))
 
         tr_avg_loss, tr_detail_loss = train(
             train_loader, model, optimizer, epoch,
