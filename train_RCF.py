@@ -45,7 +45,7 @@ parser.add_argument('--itersize', default=10, type=int,
 # =============== misc
 parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
-parser.add_argument('--print_freq', '-p', default=1000, type=int,
+parser.add_argument('--print_freq', '-p', default=50, type=int,
                     metavar='N', help='print frequency (default: 50)')
 parser.add_argument('--gpu', default='0', type=str,
                     help='GPU ID')
@@ -69,7 +69,10 @@ def main():
     # dataset
     train_dataset = BSDS_RCFLoader(root=args.dataset, split="train")
     test_dataset = BSDS_RCFLoader(root=args.dataset, split="test")
-    train_loader = DataLoader(
+    train_loader_order = DataLoader(
+        train_dataset, batch_size=args.batch_size,
+        num_workers=8, drop_last=True,shuffle=False)
+    train_loader  = DataLoader(
         train_dataset, batch_size=args.batch_size,
         num_workers=8, drop_last=True,shuffle=True)
     test_loader = DataLoader(
@@ -169,8 +172,8 @@ def main():
     optimizer = SGD_caffe([
             {'params': net_parameters_id['conv1-4.weight']      , 'lr': args.lr*1    , 'weight_decay': args.weight_decay},
             {'params': net_parameters_id['conv1-4.bias']        , 'lr': args.lr*2    , 'weight_decay': 0.},
-            {'params': net_parameters_id['conv5.weight']        , 'lr': args.lr*80  , 'weight_decay': args.weight_decay},
-            {'params': net_parameters_id['conv5.bias']          , 'lr': args.lr*160  , 'weight_decay': 0.},
+            {'params': net_parameters_id['conv5.weight']        , 'lr': args.lr*100  , 'weight_decay': args.weight_decay},
+            {'params': net_parameters_id['conv5.bias']          , 'lr': args.lr*200  , 'weight_decay': 0.},
             {'params': net_parameters_id['conv_down_1-5.weight'], 'lr': args.lr*0.1  , 'weight_decay': args.weight_decay},
             {'params': net_parameters_id['conv_down_1-5.bias']  , 'lr': args.lr*0.2  , 'weight_decay': 0.},
             {'params': net_parameters_id['score_dsn_1-5.weight'], 'lr': args.lr*0.01 , 'weight_decay': args.weight_decay},
@@ -206,10 +209,15 @@ def main():
             print("Performing initial testing...")
             # multiscale_test(model, test_loader, epoch=epoch, test_list=test_list,
             #      save_dir = join(TMP_DIR, 'initial-testing-record'))
-
-        tr_avg_loss, tr_detail_loss = train(
+        if epoch == 0:
+            tr_avg_loss, tr_detail_loss = train(
+            train_loader_order, model, optimizer, epoch,
+            save_dir = join(TMP_DIR, 'epoch-%d-training-record' % epoch))
+        else:    
+            tr_avg_loss, tr_detail_loss = train(
             train_loader, model, optimizer, epoch,
             save_dir = join(TMP_DIR, 'epoch-%d-training-record' % epoch))
+            
         test(model, test_loader, epoch=epoch, test_list=test_list,
             save_dir = join(TMP_DIR, 'epoch-%d-testing-record-view' % epoch))
         multiscale_test(model, test_loader, epoch=epoch, test_list=test_list,
