@@ -102,7 +102,7 @@ class SGD_caffe(Optimizer):
             for p in group['params']:
                 if p.grad is None:
                     continue
-                d_p = p.grad.data / 10
+                d_p = p.grad.data
                 if weight_decay != 0:
                     d_p.add_(weight_decay, p.data)
                 if momentum != 0:
@@ -117,6 +117,7 @@ class SGD_caffe(Optimizer):
                         d_p = d_p.add(momentum, buf)
                     else:
                         d_p = buf
+                d_p = d_p / 10
 
                 p.data.add_(-1, d_p)
 
