@@ -81,6 +81,7 @@ class BSDS_RCFLoader(data.Dataset):
             raise ValueError("Invalid split type!")
         with open(self.filelist, 'r') as f:
             self.filelist = f.readlines()
+            self.filelist = self.filelist[::-1]
 
     def __len__(self):
         return len(self.filelist)
