@@ -2,6 +2,8 @@
 Thanks to <a href="https://github.com/yun-liu">yun-liu's</a> help.
 Created by XuanyiLi, if you have any problem in using it, please contact:xuanyili.edu@gmail.com.
 The best result of my pytorch model is *** ODS F-score now.
+### For Fun：smile:
+![gif](https://github.com/meteorshowers/RCF-pytorch/blob/master/doc/titannic.gif)
 #### my model result
 the following are the side outputs and the prediction example
 Adam no tunelr 1e-4:
